@@ -37,6 +37,5 @@ jar {
         attributes 'Main-Class': 'no.tornado.fxsample.login.JoinerApp'
     }
 
-    // NEW LINE HERE !!!
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
