@@ -1,4 +1,4 @@
-package no.tornado.fxsample.login
+package com.avstreams.merge
 
 import tornadofx.Stylesheet
 import tornadofx.box
@@ -6,6 +6,7 @@ import tornadofx.cssclass
 import tornadofx.px
 
 class Styles : Stylesheet() {
+	
     companion object {
         val avScreen by cssclass()
     }

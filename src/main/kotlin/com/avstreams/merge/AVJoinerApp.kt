@@ -1,11 +1,12 @@
-package no.tornado.fxsample.login
+package com.avstreams.merge
 
 import javafx.application.Application
 import javafx.stage.Stage
 import tornadofx.App
 import tornadofx.importStylesheet
 
-class JoinerApp : App(AVScreen::class) {
+class AVJoinerApp : App(AVScreen::class) {
+	
     private val avController: AVController by inject()
 
     override fun start(stage: Stage) {
@@ -17,5 +18,5 @@ class JoinerApp : App(AVScreen::class) {
 }
 
 fun main(args: Array<String>) {
-    Application.launch(JoinerApp::class.java, *args)
+    Application.launch(AVJoinerApp::class.java, *args)
 }

@@ -1,4 +1,4 @@
-package no.tornado.fxsample.login
+package com.avstreams.merge
 
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
@@ -8,16 +8,26 @@ import javafx.scene.control.TextField
 import javafx.scene.layout.GridPane
 import javafx.stage.FileChooser
 import javafx.util.Duration
-import no.tornado.fxsample.login.Styles.Companion.avScreen
+import com.avstreams.merge.Styles.Companion.avScreen
 import tornadofx.*
 
 class AVScreen : View() {
+
     override val root = GridPane()
     private val avController: AVController by inject()
 
     var video: TextField by singleAssign()
     var audio: TextField by singleAssign()
     var message: TextArea by singleAssign()
+
+    private val videoFilters = listOf(FileChooser.ExtensionFilter("WebM Video Files", "*.webm"),
+            FileChooser.ExtensionFilter("MP4 Files", "*.mp4"), FileChooser.ExtensionFilter("Theora Files", "*.ogg"),
+            FileChooser.ExtensionFilter("OGG Video Files", "*.ogv"))
+
+    private val audioFilters = listOf(FileChooser.ExtensionFilter("WebM Audio Files", "*.webm"),
+            FileChooser.ExtensionFilter("M4A Files", "*.m4a"), FileChooser.ExtensionFilter("AAC Files", "*.aac"),
+            FileChooser.ExtensionFilter("OPUS Files", "*.opus"), FileChooser.ExtensionFilter("Vorbis Files", "*.ogg"),
+            FileChooser.ExtensionFilter("OGG Audio Files", "*.oga"))
 
     init {
         title = "Join Video & Audio Streams"
@@ -30,7 +40,9 @@ class AVScreen : View() {
                 button("^") {
                     setOnAction {
                         val fileChooser = FileChooser()
-                        video.text = fileChooser.showOpenDialog(null).absolutePath
+                        fileChooser.extensionFilters.addAll(videoFilters)
+                        val showOpenDialog = fileChooser.showOpenDialog(null)
+                        if (showOpenDialog != null) video.text = showOpenDialog.absolutePath
                     }
                 }
             }
@@ -40,7 +52,9 @@ class AVScreen : View() {
                 button("^") {
                     setOnAction {
                         val fileChooser = FileChooser()
-                        audio.text = fileChooser.showOpenDialog(null).absolutePath
+                        fileChooser.extensionFilters.addAll(audioFilters)
+                        val showOpenDialog = fileChooser.showOpenDialog(null)
+                        if (showOpenDialog != null) audio.text = showOpenDialog.absolutePath
                     }
 
                 }
@@ -52,8 +66,8 @@ class AVScreen : View() {
 
                     setOnAction {
                         avController.tryMultiplexing(
-                                video.text,
-                                audio.text
+                            video.text,
+                            audio.text
                         )
                     }
                 }
@@ -84,7 +98,8 @@ class AVScreen : View() {
             if (x == 0) {
                 stage.x = stage.x + move
                 x = 1
-            } else {
+            }
+            else {
                 stage.x = stage.x - move
                 x = 0
             }
@@ -97,7 +112,8 @@ class AVScreen : View() {
             if (y == 0) {
                 stage.y = stage.y + move
                 y = 1
-            } else {
+            }
+            else {
                 stage.y = stage.y - move
                 y = 0
             }
