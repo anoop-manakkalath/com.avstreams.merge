@@ -56,7 +56,7 @@ class AVController : Controller() {
 
                 val errFlag  = stdError.lines().count() > 0
                 if (!errFlag) {
-                    buffer.append("[  OK  ] Successfully multiplexed the streams.\n")
+                    buffer.append("[ OK ] Successfully multiplexed the streams.\n")
                 }
                 avScreen.message.text = buffer.toString()
                 stdInput.close()
