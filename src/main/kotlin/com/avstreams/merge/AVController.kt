@@ -5,6 +5,7 @@ import tornadofx.Controller
 import tornadofx.FX
 import java.io.InputStreamReader
 import java.io.BufferedReader
+import java.io.IOException
 
 class AVController : Controller() {
     private val avScreen: AVScreen by inject()
@@ -15,7 +16,20 @@ class AVController : Controller() {
                 string(video)?.let { string(audio)?.let { it1 -> tryMultiplexing(it, it1) } }
             }
             else {
-                showMainScreen("Please Join Streams")
+                val cmd = "ffmpeg -version"
+                try {
+                    val process = Runtime.getRuntime().exec(cmd)
+                    val stdError = BufferedReader(InputStreamReader(process.errorStream))
+                    if (stdError.lines().count() > 0) {
+                        showMainScreen("Error! An unknown issue with 'ffmpeg'. Please try reinstalling 'ffmpeg")
+                    }
+                    else {
+                        showMainScreen("Please select and join streams...")
+                    }
+                }
+                catch (e: IOException) {
+                    showMainScreen("Error! You need to have 'ffmpeg' in your 'path'")
+                }
             }
         }
     }

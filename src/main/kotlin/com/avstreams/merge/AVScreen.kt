@@ -10,6 +10,7 @@ import javafx.stage.FileChooser
 import javafx.util.Duration
 import com.avstreams.merge.Styles.Companion.avScreen
 import tornadofx.*
+import java.io.File
 
 class AVScreen : View() {
 
@@ -20,13 +21,15 @@ class AVScreen : View() {
     var audio: TextField by singleAssign()
     var message: TextArea by singleAssign()
 
+    private var lastDir: File = File(System.getProperty("user.home"))
+
     private val videoFilters = listOf(FileChooser.ExtensionFilter("WebM Video Files", "*.webm"),
             FileChooser.ExtensionFilter("MP4 Files", "*.mp4"), FileChooser.ExtensionFilter("Theora Files", "*.ogg"),
             FileChooser.ExtensionFilter("OGG Video Files", "*.ogv"))
 
-    private val audioFilters = listOf(FileChooser.ExtensionFilter("WebM Audio Files", "*.webm"),
-            FileChooser.ExtensionFilter("M4A Files", "*.m4a"), FileChooser.ExtensionFilter("AAC Files", "*.aac"),
-            FileChooser.ExtensionFilter("OPUS Files", "*.opus"), FileChooser.ExtensionFilter("Vorbis Files", "*.ogg"),
+    private val audioFilters = listOf(FileChooser.ExtensionFilter("OPUS Files", "*.opus"),
+            FileChooser.ExtensionFilter("AAC Files", "*.aac"), FileChooser.ExtensionFilter("M4A Files", "*.m4a"),
+            FileChooser.ExtensionFilter("Vorbis Files", "*.ogg"), FileChooser.ExtensionFilter("WebM Audio Files", "*.webm"),
             FileChooser.ExtensionFilter("OGG Audio Files", "*.oga"))
 
     init {
@@ -40,9 +43,13 @@ class AVScreen : View() {
                 button("^") {
                     setOnAction {
                         val fileChooser = FileChooser()
+                        fileChooser.initialDirectory = lastDir
                         fileChooser.extensionFilters.addAll(videoFilters)
                         val showOpenDialog = fileChooser.showOpenDialog(null)
-                        if (showOpenDialog != null) video.text = showOpenDialog.absolutePath
+                        if (showOpenDialog != null) {
+                            video.text = showOpenDialog.absolutePath
+                            lastDir = File(video.text).parentFile
+                        }
                     }
                 }
             }
@@ -52,6 +59,7 @@ class AVScreen : View() {
                 button("^") {
                     setOnAction {
                         val fileChooser = FileChooser()
+                        fileChooser.initialDirectory = lastDir
                         fileChooser.extensionFilters.addAll(audioFilters)
                         val showOpenDialog = fileChooser.showOpenDialog(null)
                         if (showOpenDialog != null) audio.text = showOpenDialog.absolutePath
