@@ -8,6 +8,7 @@ import java.io.BufferedReader
 import java.io.IOException
 
 class AVController : Controller() {
+
     private val avScreen: AVScreen by inject()
 
     fun init() {
@@ -21,10 +22,10 @@ class AVController : Controller() {
                     val process = Runtime.getRuntime().exec(cmd)
                     val stdError = BufferedReader(InputStreamReader(process.errorStream))
                     if (stdError.lines().count() > 0) {
-                        showMainScreen("Error! An unknown issue with 'ffmpeg'. Please try reinstalling 'ffmpeg")
+                        showMainScreen("Error! An unknown issue with 'ffmpeg'. Please try after reinstalling 'ffmpeg")
                     }
                     else {
-                        showMainScreen("Please select and join streams...")
+                        showMainScreen("Please select and join streams")
                     }
                 }
                 catch (e: IOException) {
@@ -54,7 +55,6 @@ class AVController : Controller() {
         } ui { success ->
             if (success) {
                 avScreen.clear()
-                val buffer = StringBuilder()
                 val output = video.subSequence(0, video.lastIndexOf(".")).toString() + "_" +
                     video.subSequence(video.lastIndexOf("."), video.length)
                 val cmd = "ffmpeg -i \"${video}\" -i \"${audio}\" -codec copy -shortest \"${output}\""
@@ -64,15 +64,14 @@ class AVController : Controller() {
                 val stdError = BufferedReader(InputStreamReader(process.errorStream))
 
                 // read the output from the command
-                stdInput.lines().forEach { line ->  buffer.append(line).append("\n") }
+                stdInput.lines().forEach { line -> avScreen.message.appendText(line + "\n") }
                 // read any errors from the attempted command
-                stdError.lines().forEach { line ->  buffer.append(line).append("\n")}
+                stdError.lines().forEach { line -> avScreen.message.appendText(line + "\n") }
 
                 val errFlag  = stdError.lines().count() > 0
                 if (!errFlag) {
-                    buffer.append("[ OK ] Successfully multiplexed the streams.\n")
+                    avScreen.message.appendText("[ OK ] Successfully multiplexed the streams.\n")
                 }
-                avScreen.message.text = buffer.toString()
                 stdInput.close()
                 stdError.close()
             }
@@ -86,5 +85,4 @@ class AVController : Controller() {
         const val video = "Video"
         const val audio = "Audio"
     }
-
 }

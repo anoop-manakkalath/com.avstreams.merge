@@ -64,7 +64,6 @@ class AVScreen : View() {
                         val showOpenDialog = fileChooser.showOpenDialog(null)
                         if (showOpenDialog != null) audio.text = showOpenDialog.absolutePath
                     }
-
                 }
             }
 
