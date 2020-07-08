@@ -11,6 +11,9 @@ class AVController : Controller() {
 
     private val avScreen: AVScreen by inject()
 
+    /**
+     * Initialize the tool. Checks for the 'ffmpeg' in the (environment) path
+     */
     fun init() {
         with (config) {
             if (containsKey(video) && containsKey(audio)) {
@@ -35,6 +38,10 @@ class AVController : Controller() {
         }
     }
 
+    /**
+     * Writes the messages to the 'log' of the tool.
+     * It calls the shakes function, if any error is there
+     */
     private fun showMainScreen(message: String, shake: Boolean = false) {
         if (FX.primaryStage.scene.root != avScreen.root) {
             FX.primaryStage.scene.root = avScreen.root
@@ -49,6 +56,9 @@ class AVController : Controller() {
         }
     }
 
+    /**
+     * Video and audio multiplexing using the 'ffmpeg'
+     */
     fun tryMultiplexing(video: String, audio: String) {
         runAsync {
             video.trim() != "" && audio.trim() != ""
@@ -68,8 +78,7 @@ class AVController : Controller() {
                 // read any errors from the attempted command
                 stdError.lines().forEach { line -> avScreen.message.appendText(line + "\n") }
 
-                val errFlag  = stdError.lines().count() > 0
-                if (!errFlag) {
+                if (stdError.lines().count() <= 0) {
                     avScreen.message.appendText("[ OK ] Successfully multiplexed the streams.\n")
                 }
                 stdInput.close()

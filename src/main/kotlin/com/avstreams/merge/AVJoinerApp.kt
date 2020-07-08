@@ -17,6 +17,7 @@ class AVJoinerApp : App(AVScreen::class) {
     }
 }
 
+/** Main function */
 fun main(args: Array<String>) {
     Application.launch(AVJoinerApp::class.java, *args)
 }

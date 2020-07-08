@@ -23,17 +23,18 @@ class AVScreen : View() {
 
     private var lastDir: File = File(System.getProperty("user.home"))
 
-    private val videoFilters = listOf(FileChooser.ExtensionFilter("WebM Video Files", "*.webm"),
+    private val videoFilters = listOf(FileChooser.ExtensionFilter("WebM Files", "*.webm"),
             FileChooser.ExtensionFilter("MP4 Files", "*.mp4"), FileChooser.ExtensionFilter("Theora Files", "*.ogg"),
-            FileChooser.ExtensionFilter("OGG Video Files", "*.ogv"))
+            FileChooser.ExtensionFilter("OGG Video Files", "*.ogv"), FileChooser.ExtensionFilter("Matroska Video Files", "*.mkv"))
 
     private val audioFilters = listOf(FileChooser.ExtensionFilter("OPUS Files", "*.opus"),
             FileChooser.ExtensionFilter("AAC Files", "*.aac"), FileChooser.ExtensionFilter("M4A Files", "*.m4a"),
             FileChooser.ExtensionFilter("Vorbis Files", "*.ogg"), FileChooser.ExtensionFilter("WebM Audio Files", "*.webm"),
-            FileChooser.ExtensionFilter("OGG Audio Files", "*.oga"))
+            FileChooser.ExtensionFilter("MP4 Audio Files", "*.mp4"), FileChooser.ExtensionFilter("OGG Audio Files", "*.oga"),
+            FileChooser.ExtensionFilter("Matroska Audio Files", "*.mka"))
 
     init {
-        title = "Join Video & Audio Streams"
+        title = "AV Streams Joiner v1.1.2 [ Join Video & Audio Streams ]"
 
         with (root) {
             addClass(avScreen)
@@ -92,6 +93,9 @@ class AVScreen : View() {
         audio.clear()
     }
 
+    /**
+     * Shakes the tool UI. This is usually called in case of any errors.
+     */
     fun shakeStage() {
         var x = 0
         var y = 0
