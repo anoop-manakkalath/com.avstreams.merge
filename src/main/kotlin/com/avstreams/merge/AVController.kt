@@ -65,24 +65,30 @@ class AVController : Controller() {
         } ui { success ->
             if (success) {
                 avScreen.clear()
-                val output = video.subSequence(0, video.lastIndexOf(".")).toString() + "_" +
-                    video.subSequence(video.lastIndexOf("."), video.length)
-                val cmd = "ffmpeg -i \"${video}\" -i \"${audio}\" -codec copy -shortest \"${output}\""
-                val process = Runtime.getRuntime().exec(cmd)
+                if (!video.contains(".") && !audio.contains(".")) {
+                    avScreen.message.text = "[ FAIL ] Invalid stream"
+                } else {
+                    val output = video.subSequence(0, video.lastIndexOf(".")).toString() + "_" +
+                            video.subSequence(video.lastIndexOf("."), video.length)
+                    val cmd = "ffmpeg -i \"$video\" -i \"$audio\" -codec copy -shortest \"$output\""
+                    val process = Runtime.getRuntime().exec(cmd)
 
-                val stdInput = BufferedReader(InputStreamReader(process.inputStream))
-                val stdError = BufferedReader(InputStreamReader(process.errorStream))
+                    avScreen.message.text = ""
+                    val stdInput = BufferedReader(InputStreamReader(process.inputStream))
+                    val stdError = BufferedReader(InputStreamReader(process.errorStream))
+                    process.waitFor()
 
-                // read the output from the command
-                stdInput.lines().forEach { line -> avScreen.message.appendText(line + "\n") }
-                // read any errors from the attempted command
-                stdError.lines().forEach { line -> avScreen.message.appendText(line + "\n") }
+                    // read the output from the command
+                    stdInput.lines().forEach { line -> avScreen.message.appendText(line + "\n") }
+                    // read any errors from the attempted command
+                    stdError.lines().forEach { line -> avScreen.message.appendText(line + "\n") }
 
-                if (stdError.lines().count() <= 0) {
-                    avScreen.message.appendText("[ OK ] Successfully multiplexed the streams.\n")
+                    if (stdError.lines().count() < 1) {
+                        avScreen.message.appendText("[ OK ] Successfully multiplexed the streams.\n")
+                    }
+                    stdInput.close()
+                    stdError.close()
                 }
-                stdInput.close()
-                stdError.close()
             }
             else {
                 showMainScreen("[FAIL] Please select streams", true)

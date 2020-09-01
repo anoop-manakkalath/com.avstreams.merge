@@ -2,7 +2,6 @@ package com.avstreams.merge
 
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
-import javafx.event.EventHandler
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
 import javafx.scene.layout.GridPane
@@ -34,7 +33,7 @@ class AVScreen : View() {
             FileChooser.ExtensionFilter("Matroska Audio Files", "*.mka"))
 
     init {
-        title = "AV Streams Joiner v1.1.2 [ Join Video & Audio Streams ]"
+        title = "AV Streams Joiner v1.2.1 [ Join Video & Audio Streams ]"
 
         with (root) {
             addClass(avScreen)
@@ -105,7 +104,7 @@ class AVScreen : View() {
 
         val stage = FX.primaryStage
 
-        val timelineX = Timeline(KeyFrame(keyframeDuration, EventHandler {
+        val timelineX = Timeline(KeyFrame(keyframeDuration, {
             if (x == 0) {
                 stage.x = stage.x + move
                 x = 1
@@ -119,7 +118,7 @@ class AVScreen : View() {
         timelineX.cycleCount = cycleCount
         timelineX.isAutoReverse = false
 
-        val timelineY = Timeline(KeyFrame(keyframeDuration, EventHandler {
+        val timelineY = Timeline(KeyFrame(keyframeDuration, {
             if (y == 0) {
                 stage.y = stage.y + move
                 y = 1
