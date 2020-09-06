@@ -8,6 +8,7 @@ import javafx.scene.layout.GridPane
 import javafx.stage.FileChooser
 import javafx.util.Duration
 import com.avstreams.merge.Styles.Companion.avScreen
+import javafx.scene.control.Button
 import tornadofx.*
 import java.io.File
 
@@ -19,6 +20,7 @@ class AVScreen : View() {
     var video: TextField by singleAssign()
     var audio: TextField by singleAssign()
     var message: TextArea by singleAssign()
+    var multiplexBtn: Button by singleAssign()
 
     private var lastDir: File = File(System.getProperty("user.home"))
 
@@ -33,7 +35,7 @@ class AVScreen : View() {
             FileChooser.ExtensionFilter("Matroska Audio Files", "*.mka"))
 
     init {
-        title = "AV Streams Joiner v1.2.1 [ Join Video & Audio Streams ]"
+        title = "AV Streams Joiner v1.3 [ Join Video & Audio Streams ]"
 
         with (root) {
             addClass(avScreen)
@@ -47,7 +49,7 @@ class AVScreen : View() {
                         fileChooser.extensionFilters.addAll(videoFilters)
                         val showOpenDialog = fileChooser.showOpenDialog(null)
                         if (showOpenDialog != null) {
-                            video.text = showOpenDialog.absolutePath
+                            video.text = showOpenDialog.canonicalPath
                             lastDir = File(video.text).parentFile
                         }
                     }
@@ -62,13 +64,13 @@ class AVScreen : View() {
                         fileChooser.initialDirectory = lastDir
                         fileChooser.extensionFilters.addAll(audioFilters)
                         val showOpenDialog = fileChooser.showOpenDialog(null)
-                        if (showOpenDialog != null) audio.text = showOpenDialog.absolutePath
+                        if (showOpenDialog != null) audio.text = showOpenDialog.canonicalPath
                     }
                 }
             }
 
             row {
-                button("Multiplex") {
+                multiplexBtn = button("Multiplex") {
                     isDefaultButton = true
 
                     setOnAction {

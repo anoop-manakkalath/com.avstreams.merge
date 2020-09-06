@@ -4,11 +4,8 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.9'
 }
 
-apply plugin: 'kotlin'
-apply plugin: 'org.openjfx.javafxplugin'
-
 group 'com.avstreams.merge'
-version 'v1.2.1-20200901'
+version 'v1.3-20200906'
 
 repositories {
     mavenCentral()
@@ -19,8 +16,6 @@ javafx {
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
-def kotlin_version = '1.4.0'
-def tornadofx_version = '1.7.20'
 def platform
 def currentOS = org.gradle.internal.os.OperatingSystem.current()
 
@@ -35,19 +30,18 @@ else if (currentOS.isMacOsX()) {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin_version}"
-    compile "no.tornado:tornadofx:${tornadofx_version}"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.0"
+    compile "org.jetbrains.kotlin:kotlin-reflect:1.4.0"
+    compile "no.tornado:tornadofx:1.7.20"
     compile "org.openjfx:javafx-base:11:${platform}"
     compile "org.openjfx:javafx-graphics:11:${platform}"
     compile "org.openjfx:javafx-controls:11:${platform}"
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "11"
-}
-
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "11"
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11
+    }
 }
 
 jar {

@@ -5,6 +5,7 @@ import tornadofx.Controller
 import tornadofx.FX
 import java.io.InputStreamReader
 import java.io.BufferedReader
+import java.io.File
 import java.io.IOException
 
 class AVController : Controller() {
@@ -20,19 +21,21 @@ class AVController : Controller() {
                 string(video)?.let { string(audio)?.let { it1 -> tryMultiplexing(it, it1) } }
             }
             else {
-                val cmd = "ffmpeg -version"
+                val cmd = arrayOf("ffmpeg", "-version")
                 try {
                     val process = Runtime.getRuntime().exec(cmd)
                     val stdError = BufferedReader(InputStreamReader(process.errorStream))
                     if (stdError.lines().count() > 0) {
-                        showMainScreen("Error! An unknown issue with 'ffmpeg'. Please try after reinstalling 'ffmpeg")
+                        showMainScreen("[FAIL] An unknown issue with 'ffmpeg'. Please try after reinstalling 'ffmpeg'")
+                        disableMultiplexBtn()
                     }
                     else {
-                        showMainScreen("Please select and join streams")
+                        showMainScreen("Please select and join streams...")
                     }
                 }
                 catch (e: IOException) {
-                    showMainScreen("Error! You need to have 'ffmpeg' in your 'path'")
+                    showMainScreen("[FAIL] You need to have 'ffmpeg' in your 'path'")
+                    disableMultiplexBtn()
                 }
             }
         }
@@ -57,6 +60,17 @@ class AVController : Controller() {
     }
 
     /**
+     * Disables the 'Multiplex' button, if any error is there with 'ffmpeg'
+     */
+    private fun disableMultiplexBtn(shake: Boolean = true) {
+        Platform.runLater {
+            avScreen.message.requestFocus()
+            avScreen.multiplexBtn.isDisable = true
+            if (shake) avScreen.shakeStage()
+        }
+    }
+
+    /**
      * Video and audio multiplexing using the 'ffmpeg'
      */
     fun tryMultiplexing(video: String, audio: String) {
@@ -70,28 +84,33 @@ class AVController : Controller() {
                 } else {
                     val output = video.subSequence(0, video.lastIndexOf(".")).toString() + "_" +
                             video.subSequence(video.lastIndexOf("."), video.length)
-                    val cmd = "ffmpeg -i \"$video\" -i \"$audio\" -codec copy -shortest \"$output\""
-                    val process = Runtime.getRuntime().exec(cmd)
-
-                    avScreen.message.text = ""
-                    val stdInput = BufferedReader(InputStreamReader(process.inputStream))
-                    val stdError = BufferedReader(InputStreamReader(process.errorStream))
-                    process.waitFor()
-
-                    // read the output from the command
-                    stdInput.lines().forEach { line -> avScreen.message.appendText(line + "\n") }
-                    // read any errors from the attempted command
-                    stdError.lines().forEach { line -> avScreen.message.appendText(line + "\n") }
-
-                    if (stdError.lines().count() < 1) {
-                        avScreen.message.appendText("[ OK ] Successfully multiplexed the streams.\n")
+                    if (File(output).exists()) {
+                        avScreen.message.clear()
+                        avScreen.message.text = "[ EX ] The output file is already present.\n"
                     }
-                    stdInput.close()
-                    stdError.close()
+                    else {
+                        val cmd = arrayOf("ffmpeg", "-i", video, "-i", audio, "-codec", "copy", "-shortest", output)
+                        val process = Runtime.getRuntime().exec(cmd)
+
+                        avScreen.message.clear()
+                        val stdInput = BufferedReader(InputStreamReader(process.inputStream))
+                        val stdError = BufferedReader(InputStreamReader(process.errorStream))
+
+                        // Read the output from the command
+                        stdInput.lines().forEach { line -> avScreen.message.appendText(line + "\n") }
+                        // Read any errors from the attempted command
+                        stdError.lines().forEach { line -> avScreen.message.appendText(line + "\n") }
+
+                        if (stdError.lines().count() < 1) {
+                            avScreen.message.appendText("[ OK ] Successfully multiplexed the streams.\n")
+                        }
+                        stdInput.close()
+                        stdError.close()
+                    }
                 }
             }
             else {
-                showMainScreen("[FAIL] Please select streams", true)
+                showMainScreen("[FAIL] Please select streams...", true)
             }
         }
     }
