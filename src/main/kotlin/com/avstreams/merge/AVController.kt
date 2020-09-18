@@ -26,7 +26,7 @@ class AVController : Controller() {
                     val process = Runtime.getRuntime().exec(cmd)
                     val stdError = BufferedReader(InputStreamReader(process.errorStream))
                     if (stdError.lines().count() > 0) {
-                        showMainScreen("[FAIL] An unknown issue with 'ffmpeg'. Please try after reinstalling 'ffmpeg'")
+                        showMainScreen("[FAIL] An unknown issue with 'ffmpeg'. Please try after reinstalling 'ffmpeg'.")
                         disableMultiplexBtn()
                     }
                     else {
@@ -34,7 +34,7 @@ class AVController : Controller() {
                     }
                 }
                 catch (e: IOException) {
-                    showMainScreen("[FAIL] You need to have 'ffmpeg' in your 'path'")
+                    showMainScreen("[FAIL] You need to have 'ffmpeg' in your 'path'.")
                     disableMultiplexBtn()
                 }
             }
@@ -89,10 +89,12 @@ class AVController : Controller() {
                         avScreen.message.text = "[ EX ] The output file is already present.\n"
                     }
                     else {
+						avScreen.message.clear()
+                        avScreen.message.appendText("The selected video file is: $video\n")
+                        avScreen.message.appendText("The selected audio file is: $video\n")
                         val cmd = arrayOf("ffmpeg", "-i", video, "-i", audio, "-codec", "copy", "-shortest", output)
                         val process = Runtime.getRuntime().exec(cmd)
 
-                        avScreen.message.clear()
                         val stdInput = BufferedReader(InputStreamReader(process.inputStream))
                         val stdError = BufferedReader(InputStreamReader(process.errorStream))
 
@@ -102,6 +104,7 @@ class AVController : Controller() {
                         stdError.lines().forEach { line -> avScreen.message.appendText(line + "\n") }
 
                         if (stdError.lines().count() < 1) {
+                            avScreen.message.appendText("The output file is: $output.\n")
                             avScreen.message.appendText("[ OK ] Successfully multiplexed the streams.\n")
                         }
                         stdInput.close()
