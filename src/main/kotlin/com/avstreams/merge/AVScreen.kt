@@ -36,7 +36,7 @@ class AVScreen : View() {
             FileChooser.ExtensionFilter("Matroska Audio Files", "*.mka"))
 
     init {
-        title = "AV Streams Joiner v1.4 [ Join Video & Audio Streams ]"
+        title = "AV Streams Joiner v1.4.1 [ Join Video & Audio Streams ]"
 
         with (root) {
             addClass(avScreen)

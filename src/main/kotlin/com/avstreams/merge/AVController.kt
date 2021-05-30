@@ -92,7 +92,7 @@ class AVController : Controller() {
 						avScreen.message.clear()
                         runAsync {
                             avScreen.message.appendText("The selected video file is: $video\n")
-                            avScreen.message.appendText("The selected audio file is: $video\n")
+                            avScreen.message.appendText("The selected audio file is: $audio\n")
                         }
                         val cmd = arrayOf("ffmpeg", "-i", video, "-i", audio, "-codec", "copy", "-shortest", output)
                         val process = Runtime.getRuntime().exec(cmd)

@@ -18,7 +18,7 @@ else if (currentOS.isMacOsX()) {
 }
 
 group 'com.avstreams.merge'
-version "v1.4-20210529-${platform}"
+version "v1.4.1-20210530-${platform}"
 
 repositories {
     mavenCentral()
