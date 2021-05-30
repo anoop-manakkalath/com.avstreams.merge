@@ -11,6 +11,7 @@ import com.avstreams.merge.Styles.Companion.avScreen
 import javafx.scene.control.Button
 import tornadofx.*
 import java.io.File
+import java.util.*
 
 class AVScreen : View() {
 
@@ -35,7 +36,7 @@ class AVScreen : View() {
             FileChooser.ExtensionFilter("Matroska Audio Files", "*.mka"))
 
     init {
-        title = "AV Streams Joiner v1.3.1 [ Join Video & Audio Streams ]"
+        title = "AV Streams Joiner v1.4 [ Join Video & Audio Streams ]"
 
         with (root) {
             addClass(avScreen)
@@ -47,8 +48,8 @@ class AVScreen : View() {
                         val fileChooser = FileChooser()
                         fileChooser.initialDirectory = lastDir
                         fileChooser.extensionFilters.addAll(videoFilters)
-                        val showOpenDialog = fileChooser.showOpenDialog(null)
-                        if (showOpenDialog != null) {
+                        val showOpenDialog = fileChooser.showOpenDialog(currentStage)
+                        if (Objects.nonNull(showOpenDialog)) {
                             video.text = showOpenDialog.canonicalPath
                             lastDir = File(video.text).parentFile
                         }
@@ -63,8 +64,10 @@ class AVScreen : View() {
                         val fileChooser = FileChooser()
                         fileChooser.initialDirectory = lastDir
                         fileChooser.extensionFilters.addAll(audioFilters)
-                        val showOpenDialog = fileChooser.showOpenDialog(null)
-                        if (showOpenDialog != null) audio.text = showOpenDialog.canonicalPath
+                        val showOpenDialog = fileChooser.showOpenDialog(currentStage)
+                        if (Objects.nonNull(showOpenDialog)) {
+                            audio.text = showOpenDialog.canonicalPath
+                        }
                     }
                 }
             }

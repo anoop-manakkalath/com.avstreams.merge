@@ -1,7 +1,7 @@
 plugins {
     id 'application'
-    id 'org.jetbrains.kotlin.jvm' version '1.4.21-2'
-    id 'org.openjfx.javafxplugin' version '0.0.9'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
+    id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
 def platform
@@ -18,23 +18,23 @@ else if (currentOS.isMacOsX()) {
 }
 
 group 'com.avstreams.merge'
-version "v1.3.2-20210105-${platform}"
+version "v1.4-20210529-${platform}"
 
 repositories {
     mavenCentral()
 }
 
 javafx {
-    version = '15.0.1'
+    version = '16'
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 dependencies {
-    compile	'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.21-2'
+    compile	'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10'
     compile 'no.tornado:tornadofx:1.7.20'
-    compile	"org.openjfx:javafx-base:15.0.1:${platform}"
-    compile "org.openjfx:javafx-graphics:15.0.1:${platform}"
-    compile "org.openjfx:javafx-controls:15.0.1:${platform}"
+    compile	"org.openjfx:javafx-base:16:${platform}"
+    compile "org.openjfx:javafx-graphics:16:${platform}"
+    compile "org.openjfx:javafx-controls:16:${platform}"
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
@@ -49,4 +49,5 @@ jar {
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
+
 
