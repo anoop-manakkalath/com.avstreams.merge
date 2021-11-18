@@ -1,8 +1,8 @@
 plugins {
     id "application"
-    id "org.jetbrains.kotlin.jvm" version "1.5.30"
+    id "org.jetbrains.kotlin.jvm" version "1.6.0"
     id "org.openjfx.javafxplugin" version "0.0.10"
-    id "com.github.johnrengelman.shadow" version "7.0.0"
+    id "com.github.johnrengelman.shadow" version "7.1.0"
 }
 
 mainClassName = "com.avstreams.merge.AVJoinerAppKt"
@@ -24,23 +24,25 @@ else if (currentOS.isUnix()) {
 }
 
 group "com.avstreams.merge"
-version "v1.4.2-20210826-${platform}"
+version "v1.4.2-20211118-${platform}"
 
 repositories {
     mavenCentral()
 }
 
+def javaFxVersion = "17.0.1"
+
 javafx {
-    version = "16"
+    version = "${javaFxVersion}"
     modules = [ "javafx.controls", "javafx.fxml" ]
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0"
     implementation "no.tornado:tornadofx:1.7.20"
-    implementation "org.openjfx:javafx-base:16:${platform}"
-    implementation "org.openjfx:javafx-graphics:16:${platform}"
-    implementation "org.openjfx:javafx-controls:16:${platform}"
+    implementation "org.openjfx:javafx-base:${javaFxVersion}:${platform}"
+    implementation "org.openjfx:javafx-graphics:${javaFxVersion}:${platform}"
+    implementation "org.openjfx:javafx-controls:${javaFxVersion}:${platform}"
 }
 
 compileKotlin {
