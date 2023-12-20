@@ -36,7 +36,7 @@ class AVScreen : View() {
             FileChooser.ExtensionFilter("Matroska Audio Files", "*.mka"))
 
     init {
-        title = "AV Streams Joiner v1.4.3 [ Join Video & Audio Streams ]"
+        title = "AV Streams Joiner v1.4.4 [ Join Video & Audio Streams ]"
 
         with (root) {
             addClass(avScreen)
@@ -111,11 +111,11 @@ class AVScreen : View() {
 
         val timelineX = Timeline(KeyFrame(keyframeDuration, {
             if (x == 0) {
-                stage.x = stage.x + move
+                stage.x += move
                 x = 1
             }
             else {
-                stage.x = stage.x - move
+                stage.x -= move
                 x = 0
             }
         }))
@@ -125,11 +125,11 @@ class AVScreen : View() {
 
         val timelineY = Timeline(KeyFrame(keyframeDuration, {
             if (y == 0) {
-                stage.y = stage.y + move
+                stage.y += move
                 y = 1
             }
             else {
-                stage.y = stage.y - move
+                stage.y -= move
                 y = 0
             }
         }))

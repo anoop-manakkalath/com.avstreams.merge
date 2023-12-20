@@ -17,8 +17,8 @@ class AVController : Controller() {
      */
     fun init() {
         with (config) {
-            if (containsKey(video) && containsKey(audio)) {
-                string(video)?.let { string(audio)?.let { it1 -> tryMultiplexing(it, it1) } }
+            if (containsKey(VIDEO) && containsKey(AUDIO)) {
+                string(VIDEO)?.let { string(AUDIO)?.let { it1 -> tryMultiplexing(it, it1) } }
             }
             else {
                 val cmd = arrayOf("ffmpeg", "-version")
@@ -123,7 +123,7 @@ class AVController : Controller() {
     }
 
     companion object {
-        const val video = "Video"
-        const val audio = "Audio"
+        const val VIDEO = "Video"
+        const val AUDIO = "Audio"
     }
 }

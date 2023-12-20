@@ -24,7 +24,7 @@ else if (currentOS.isUnix()) {
 }
 
 group "com.avstreams.merge"
-version "v1.4.3-20231212-${platform}"
+version "v1.4.4-20231220-${platform}"
 
 repositories {
     mavenCentral()
