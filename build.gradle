@@ -1,30 +1,30 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
-    id "application"
-    id "org.jetbrains.kotlin.jvm" version "1.9.21"
-    id "org.openjfx.javafxplugin" version "0.1.0"
-    id "com.github.johnrengelman.shadow" version "8.1.1"
+    id 'application'
+    id 'org.jetbrains.kotlin.jvm' version '2.4.0'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
-mainClassName = "com.avstreams.merge.AVJoinerAppKt"
+application {
+    mainClass = 'com.avstreams.merge.AVJoinerAppKt'
+}
 
 def platform = "undefined"
 def currentOS = org.gradle.internal.os.OperatingSystem.current()
 
 if (currentOS.isWindows()) {
     platform = "win"
-}
-else if (currentOS.isMacOsX()) {
+} else if (currentOS.isMacOsX()) {
     platform = "mac"
-}
-else if (currentOS.isLinux()) {
+} else if (currentOS.isLinux()) {
     platform = "linux"
-}
-else if (currentOS.isUnix()) {
+} else if (currentOS.isUnix()) {
     platform = "unix"
 }
 
-group "com.avstreams.merge"
-version "v1.4.4-20231220-${platform}"
+group = 'com.avstreams.merge'
+version = "v2.0.0-20261022-${platform}"
 
 repositories {
     mavenCentral()
@@ -33,25 +33,26 @@ repositories {
 def javaFxVersion = "21"
 
 javafx {
-    version = "${javaFxVersion}"
-    modules = [ "javafx.controls", "javafx.fxml" ]
+    version = javaFxVersion
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.21"
-    implementation "no.tornado:tornadofx:1.7.20"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+
+    // Explicit platform classifiers for OpenJFX
     implementation "org.openjfx:javafx-base:${javaFxVersion}:${platform}"
     implementation "org.openjfx:javafx-graphics:${javaFxVersion}:${platform}"
     implementation "org.openjfx:javafx-controls:${javaFxVersion}:${platform}"
 }
 
-tasks.compileJava {
-    sourceCompatibility = 11
-    targetCompatibility = 11
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
-tasks.compileKotlin {
+kotlin {
     compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
+        jvmTarget = JvmTarget.JVM_21
     }
 }
